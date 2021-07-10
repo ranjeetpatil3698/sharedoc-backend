@@ -1,0 +1,40 @@
+service:
+  name: sharedoc
+
+plugins:
+  - serverless-bundle
+  - serverless-pseudo-parameters
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 256
+  stage: ${opt:stage, 'dev'}
+  environment:
+    FILES_BUCKET_NAME: ${self:custom.FilesBucket.name}
+  iamRoleStatements:
+    - ${file(iam/FilesBucketIAM.yml):FilesBucketIAM}
+
+resources:
+  Resources:
+    FilesBucket: ${file(resources/FilesBucket.yml):FilesBucket}
+    FilesBucketPolicy: ${file(resources/FilesBucket.yml):FilesBucketPolicy}
+    
+
+
+functions:
+  sendfile:
+    handler: src/handlers/sendfile.handler
+    events:
+      - http:
+          method: PATCH
+          path: /sendfile/{filename}
+          cors: true
+          authorizer: ${self:custom.authorizer}
+
+custom:
+  authorizer: arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:auth-service-${self:provider.stage}-auth
+  FilesBucket:
+    name: files-bucket-bvncmli-${self:provider.stage}
+  bundle:
+    linting: false

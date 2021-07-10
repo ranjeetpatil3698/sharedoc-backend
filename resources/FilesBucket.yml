@@ -1,0 +1,18 @@
+FilesBucket:
+  Type: AWS::S3::Bucket
+  Properties:
+    BucketName: ${self:custom.FilesBucket.name}
+
+
+FilesBucketPolicy:
+  Type: AWS::S3::BucketPolicy
+  Properties:
+    Bucket: !Ref FilesBucket
+    PolicyDocument:
+      Statement:
+        - Sid: PublicRead
+          Effect: Allow
+          Principal: '*'
+          Action:
+            - s3:GetObject
+          Resource: arn:aws:s3:::${self:custom.FilesBucket.name}/*
