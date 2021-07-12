@@ -12,11 +12,14 @@ provider:
   stage: ${opt:stage, 'dev'}
   environment:
     FILES_BUCKET_NAME: ${self:custom.FilesBucket.name}
+    FILES_TABLE_NAME: ${self:custom.FilesTable.name}
   iamRoleStatements:
     - ${file(iam/FilesBucketIAM.yml):FilesBucketIAM}
+    - ${file(iam/FilesTableIAM.yml):FilesTableIAM}
 
 resources:
   Resources:
+    FilesTable: ${file(resources/FilesTable.yml):FilesTable}
     FilesBucket: ${file(resources/FilesBucket.yml):FilesBucket}
     FilesBucketPolicy: ${file(resources/FilesBucket.yml):FilesBucketPolicy}
     
@@ -31,10 +34,21 @@ functions:
           path: /sendfile/{filename}
           cors: true
           authorizer: ${self:custom.authorizer}
+  allfiles:
+    handler: src/handlers/allfiles.handler
+    events:
+      - http:
+          method: GET
+          path: /allfiles
+          cors: true
+          authorizer: ${self:custom.authorizer}
 
 custom:
   authorizer: arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:auth-service-${self:provider.stage}-auth
   FilesBucket:
     name: files-bucket-bvncmli-${self:provider.stage}
+  FilesTable:
+    name: !Ref FilesTable
+    arn: !GetAtt FilesTable.Arn
   bundle:
     linting: false

@@ -1,0 +1,15 @@
+FilesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: FilesTable-${self:provider.stage}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: userid
+            AttributeType: S
+          - AttributeName: fileid
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userid
+            KeyType: HASH
+          - AttributeName: fileid
+            KeyType: RANGE
