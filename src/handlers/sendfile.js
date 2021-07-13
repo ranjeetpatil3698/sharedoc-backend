@@ -24,6 +24,7 @@ async function sendfile(event, context) {
     newfile=await uploadPictureToS3(filename,buffer,ContentType);
     const updatedfile={
       userid:principalId.split("|")[1],
+      id:uuid(),
       fileid:uuid(),
       visible:true,
       view:0,

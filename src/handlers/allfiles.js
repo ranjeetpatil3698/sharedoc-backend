@@ -13,13 +13,19 @@ async function allfiles(event, context) {
   const {principalId}=event.requestContext.authorizer
   const userid=principalId.split('|')[1];
   let files;
-  try{
-    const result=await dynamoDB.query({
-        TableName:process.env.FILES_TABLE_NAME,
-        Key:{userid:userid}
-    }).promise();
+  let params={
+    TableName:process.env.FILES_TABLE_NAME,
+    IndexName:'userindex',
+    KeyConditionExpression:'userid=:userid',
+    ExpressionAttributeValues:{
+      ':userid':userid
+    }
+};
 
-    files=result.Items;
+  try{
+    const result=await dynamoDB.query(params).promise();
+
+    files=result;
 
   }catch(error){
     console.error(error);

@@ -8,3 +8,4 @@ FilesTableIAM:
     - dynamodb:Query
   Resource:
     - ${self:custom.FilesTable.arn}
+    - !Join ['/',['${self:custom.FilesTable.arn}','index','userindex']]

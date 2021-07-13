@@ -42,6 +42,14 @@ functions:
           path: /allfiles
           cors: true
           authorizer: ${self:custom.authorizer}
+  getfile:
+    handler: src/handlers/getfile.handler
+    events:
+      - http:
+          method: GET
+          path: /getfile/{id}
+          cors: true
+          
 
 custom:
   authorizer: arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:auth-service-${self:provider.stage}-auth
