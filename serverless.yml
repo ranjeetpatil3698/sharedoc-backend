@@ -49,6 +49,15 @@ functions:
           method: GET
           path: /getfile/{id}
           cors: true
+  updatefile:
+    handler: src/handlers/updatefile.handler
+    events:
+      - http:
+          method: PATCH
+          path: /updatefile/{id}
+          cors: true
+          authorizer: ${self:custom.authorizer}
+
           
 
 custom:

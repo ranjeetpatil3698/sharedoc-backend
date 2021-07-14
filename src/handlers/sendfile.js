@@ -19,6 +19,7 @@ async function sendfile(event, context) {
   const buffer=Buffer.from(data,'base64')
   let newfile;
   let resultdata;
+  
   try{
     //1.uploading file
     newfile=await uploadPictureToS3(filename,buffer,ContentType);
@@ -31,7 +32,7 @@ async function sendfile(event, context) {
       uploadDate:new Date().toString(),
       url:newfile.Location,
       filename,
-      validity:null
+      validity:new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toString()
     }
     //2.saving files data in db
     resultdata=await dynamoDB.put(

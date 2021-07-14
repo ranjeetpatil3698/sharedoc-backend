@@ -48,15 +48,27 @@ async function getfile(event, context) {
   try{
     const updateview=await dynamoDB.update(params1).promise();
     const result=await dynamoDB.get(params).promise();
-    const {visible}=result.Item;
+    const {visible,validity}=result.Item;
     if(!visible){
         await dynamoDB.update(params2).promise()
     
         return {
             statusCode: 200,
-            body: JSON.stringify({ message: 'link is expired ask owner to share again'}),
+            body: JSON.stringify({ message: 'File is no Longer available'}),
           };
     }
+
+    if(validity){
+      const validDate=new Date(result.Item.validity);
+      const currentDate=new Date(new Date().toString());
+      if(currentDate>validDate){
+        return {
+          statusCode: 200,
+          body: JSON.stringify({ message: 'link is expired ask owner to share again'}),
+        };
+      }
+    }
+
     files=result.Item;
 
   }catch(error){
@@ -70,7 +82,7 @@ async function getfile(event, context) {
 
   return {
     statusCode: 200,
-    body: JSON.stringify({ message: 'users files',files}),
+    body: JSON.stringify({ message: 'Files requested',files}),
   };
 }
 
