@@ -2,6 +2,15 @@ FilesBucket:
   Type: AWS::S3::Bucket
   Properties:
     BucketName: ${self:custom.FilesBucket.name}
+    CorsConfiguration:
+      CorsRules:
+        - AllowedMethods:
+            - GET
+            - HEAD
+          AllowedOrigins: 
+            - '*'
+          AllowedHeaders: 
+            - '*'
 
 
 FilesBucketPolicy:
