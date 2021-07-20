@@ -6,6 +6,7 @@ FilesTableIAM:
     - dynamodb:GetItem
     - dynamodb:UpdateItem
     - dynamodb:Query
+    - dynamodb:DeleteItem
   Resource:
     - ${self:custom.FilesTable.arn}
     - !Join ['/',['${self:custom.FilesTable.arn}','index','userindex']]

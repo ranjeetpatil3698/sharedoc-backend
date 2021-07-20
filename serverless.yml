@@ -58,12 +58,12 @@ functions:
           path: /updatefile/{id}
           cors: true
           authorizer: ${self:custom.authorizer}
-  sendmail:
-    handler: src/handlers/sendmail.handler
+  deletefile:
+    handler: src/handlers/deletefile.handler
     events:
       - http:
           method: PATCH
-          path: /sendmail
+          path: /deletefile/{id}
           cors: true
           authorizer: ${self:custom.authorizer}
 

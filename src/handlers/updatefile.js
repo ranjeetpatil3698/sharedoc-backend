@@ -13,7 +13,6 @@ async function updatefile(event, context) {
     
     const {type}=event.body;
     const {id}=event.pathParameters;
-
     let value;
     if(type==="visible"){
         value=event.body.value;
