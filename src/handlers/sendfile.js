@@ -22,7 +22,8 @@ async function sendfile(event, context) {
   
   try{
     //1.uploading file
-    newfile=await uploadPictureToS3(filename,buffer,ContentType);
+    const S3filename=uuid();
+    newfile=await uploadPictureToS3(S3filename,buffer,ContentType);
     const updatedfile={
       userid:principalId.split("|")[1],
       id:uuid(),
